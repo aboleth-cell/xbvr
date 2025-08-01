@@ -20,6 +20,12 @@ type CronSchedule struct {
 	RunAtStartDelay int  `default:"0" json:"runAtStartDelay"`
 }
 
+type MatchConfig struct {
+    AutoMatchEnabled bool    `mapstructure:"auto_match_enabled"`
+    MinTopScore      float64 `mapstructure:"min_top_score"`
+    SecondBestScale  float64 `mapstructure:"second_best_scale"`
+}
+
 type ObjectConfig struct {
 	Server struct {
 		BindAddress string `default:"0.0.0.0" json:"bindAddress"`
