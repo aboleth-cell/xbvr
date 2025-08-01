@@ -1,6 +1,9 @@
-// Add to existing config structure
-type ConfigFileMatching struct {
-    AutoMatchThreshold float64 `json:"autoMatchThreshold"` // Minimum score required for auto-matching
-    AutoMatchScaleFactor float64 `json:"autoMatchScaleFactor"` // How much higher the top score must be compared to second best
-    EnableAutoMatch bool `json:"enableAutoMatch"` // Whether to enable automatic matching
+type AppConfig struct {
+    // ... existing fields ...
+    
+    SceneMatching struct {
+        AutoMatchThreshold float64 `json:"autoMatchThreshold"` // Minimum score required for auto-matching
+        ScoreRatio        float64 `json:"scoreRatio"`         // Required ratio between top and second-best scores
+        EnableAutoMatch   bool    `json:"enableAutoMatch"`    // Toggle for auto-matching feature
+    } `json:"sceneMatching"`
 }
