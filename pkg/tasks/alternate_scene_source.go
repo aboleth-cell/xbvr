@@ -230,6 +230,27 @@ func MatchAlternateSources() {
 			// save the updated query used, but don't update the links
 			tmpAltSource.Save()
 			if len(searchResults.Hits) > 0 {
+			    topScore := searchResults.Hits[0].Score
+    			nextBest := 0.0
+    			if len(searchResults.Hits) > 1 {
+        			nextBest = searchResults.Hits[1].Score
+    			}
+    			minThreshold := config.Config.Advanced.AutoMatchMinThreshold
+    			scaleFactor := config.Config.Advanced.AutoMatchScaleFactor
+   				if topScore >= minThreshold && topScore > scaleFactor*nextBest {
+       				// Automatically link
+       				UpdateLinks(commonDb, altsource.ID, models.ExternalReferenceLink{
+           				InternalTable:       "scenes",
+           				InternalDbId:        scene.ID,
+           				InternalNameId:      scene.SceneID,
+           				ExternalReferenceID: altsource.ID,
+           				ExternalSource:      altsource.ExternalSource,
+           				ExternalId:          altsource.ExternalId,
+           				MatchType:           int(topScore),
+           				UdfDatetime1:        time.Now(),
+       				})
+       				continue // skip manual prompt for this file
+			    }
 				var scene models.Scene
 				idx := 0
 				// check the scene found by search isn't deleted, ie scene.ID == 0
