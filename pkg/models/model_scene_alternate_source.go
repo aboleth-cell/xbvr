@@ -31,6 +31,9 @@ type AltSrcMatchParams struct {
 	BoostReleased        float32   `json:"boost_released"`
 	BoostCast            float32   `json:"boost_cast"`
 	BoostDescription     float32   `json:"boost_description"`
+	AutoMatchThreshold float64   `json:"auto_match_threshold"` // Minimum score required for auto-matching
+    AutoMatchRatio    float64   `json:"auto_match_ratio"`    // Required ratio between top and second-best scores
+    EnableAutoMatch   bool      `json:"enable_auto_match"`   // Enable/disable automatic matching
 }
 
 const defaultMatchType = "should"
@@ -57,6 +60,9 @@ func (p *AltSrcMatchParams) Default() {
 	p.BoostCast = boostCast
 	p.BoostDescription = boostDescription
 	p.BoostReleased = boostReleased
+    p.AutoMatchThreshold = 0.8    // 80% confidence required by default
+    p.AutoMatchRatio = 1.5       // Top score must be 50% better than second-best
+    p.EnableAutoMatch = false    // Disabled by default for safety
 }
 
 func (p *AltSrcMatchParams) UnmarshalParams(jsonStr string) error {
